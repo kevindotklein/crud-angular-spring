@@ -16,7 +16,7 @@ export class CoursesService {
     return this.httpClient.get<Course[]>(this.API)
       .pipe(
         first(),
-        tap(courses => console.log(courses))
+        //tap(courses => console.log(courses))
       );
   }
 
@@ -25,12 +25,9 @@ export class CoursesService {
   }
 
   save(record: Partial<Course>){
-    console.log(record);
     if(record._id){
-      console.log('update');
       return this.update(record);
     }
-    console.log('create');
     return this.create(record);
   }
 
