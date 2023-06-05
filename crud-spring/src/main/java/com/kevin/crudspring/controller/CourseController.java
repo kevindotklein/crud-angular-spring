@@ -4,6 +4,7 @@ import com.kevin.crudspring.model.Course;
 import com.kevin.crudspring.repository.CourseRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,13 @@ public class CourseController {
     @GetMapping
     public List<Course> list(){
         return this.courseRepository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Course> findById(@PathVariable Long id){
+        return this.courseRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
