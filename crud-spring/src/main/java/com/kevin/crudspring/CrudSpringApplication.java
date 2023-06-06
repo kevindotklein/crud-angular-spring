@@ -1,5 +1,6 @@
 package com.kevin.crudspring;
 
+import com.kevin.crudspring.enums.Category;
 import com.kevin.crudspring.model.Course;
 import com.kevin.crudspring.repository.CourseRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -20,7 +21,7 @@ public class CrudSpringApplication {
 			courseRepository.deleteAll();
 			Course c = new Course();
 			c.setName("Angular + Spring");
-			c.setCategory("Front-end");
+			c.setCategory(Category.FRONTEND);
 			courseRepository.save(c);
 		};
 	}
