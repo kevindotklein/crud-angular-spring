@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/api/courses")
 @RequiredArgsConstructor
 public class CourseController {
-    
+
     private final CourseService courseService;
 
     @GetMapping
@@ -27,10 +27,8 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Course> findById(@PathVariable @NotNull @Positive Long id){
-        return this.courseService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public Course findById(@PathVariable @NotNull @Positive Long id){
+        return this.courseService.findById(id);
     }
 
     @PostMapping
@@ -40,18 +38,14 @@ public class CourseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Course> update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid Course course){
-        return this.courseService.update(id, course)
-                .map(recordFound -> ResponseEntity.ok().body(recordFound))
-                .orElse(ResponseEntity.notFound().build());
+    public Course update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid Course course){
+        return this.courseService.update(id, course);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable @NotNull @Positive Long id){
-        if(this.courseService.delete(id))
-            return ResponseEntity.noContent().<Void>build();
-
-        return ResponseEntity.notFound().build();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable @NotNull @Positive Long id){
+        this.courseService.delete(id);
 
     }
 

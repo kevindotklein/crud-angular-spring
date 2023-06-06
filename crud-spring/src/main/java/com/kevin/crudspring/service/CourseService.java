@@ -1,5 +1,6 @@
 package com.kevin.crudspring.service;
 
+import com.kevin.crudspring.exception.RecordNotFoundException;
 import com.kevin.crudspring.model.Course;
 import com.kevin.crudspring.repository.CourseRepository;
 import jakarta.validation.Valid;
@@ -23,30 +24,28 @@ public class CourseService {
         return this.courseRepository.findAll();
     }
 
-    public Optional<Course> findById(@NotNull @Positive Long id){
-        return this.courseRepository.findById(id);
+    public Course findById(@NotNull @Positive Long id){
+        return this.courseRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException(id));
     }
 
     public Course save(@Valid Course course){
         return this.courseRepository.save(course);
     }
 
-    public Optional<Course> update(@NotNull @Positive Long id, @Valid Course course){
+    public Course update(@NotNull @Positive Long id, @Valid Course course){
         return this.courseRepository.findById(id)
                 .map(recordFound -> {
                     recordFound.setName(course.getName());
                     recordFound.setCategory(course.getCategory());
                     return this.courseRepository.save(recordFound);
-                });
+                })
+                .orElseThrow(() -> new RecordNotFoundException(id));
     }
 
-    public boolean delete(@NotNull @Positive Long id){
-        return this.courseRepository.findById(id)
-                .map(recordFound -> {
-                    this.courseRepository.deleteById(id);
-                    return true;
-                })
-                .orElse(false);
+    public void delete(@NotNull @Positive Long id) {
+        this.courseRepository.delete(this.courseRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException(id)));
     }
 
 }
